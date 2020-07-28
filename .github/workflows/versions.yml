@@ -15,7 +15,8 @@ on:
 jobs:
   setup-versions:
     name: Setup ${{ matrix.sing }} ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
+    # runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
