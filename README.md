@@ -1,7 +1,7 @@
 # GitHub Action to setup singularity
 
-![CI: Build](https://github.com/eWaterCycle/setup-singularity/workflows/build-test/badge.svg)
-![CI: Validate](https://github.com/eWaterCycle/setup-singularity/workflows/Validate%20'setup-singularity'/badge.svg)
+![CI](https://github.com/eWaterCycle/setup-singularity/workflows/build-test/badge.svg)
+![Validate versions](https://github.com/eWaterCycle/setup-singularity/workflows/Validate%20'setup-singularity'/badge.svg)
 
 To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action compiles and installs for you.
 
