@@ -16,14 +16,15 @@ Version of singularity. See [releases page](https://github.com/hpcng/singularity
 ```yaml
 steps:
 - uses: actions/checkout@v2
+# setup-singularity action requires a go installation
 - uses: actions/setup-go@v2
   with:
     go-version: '^1.14.6'
-- uses: eWaterCycle/setup-singularity
+- uses: eWaterCycle/setup-singularity@v1
   with:
     singularity-version: 3.6.1
-- name: Version of installed singularity
-  run: singularity --version
+- name: Run a singularity container
+  run: singularity run docker://alpine cat /etc/os-release
 ```
 
 ## Build
