@@ -3356,47 +3356,48 @@ const path_1 = __importDefault(__webpack_require__(622));
 const os_1 = __webpack_require__(87);
 const core_1 = __webpack_require__(470);
 const exec_1 = __webpack_require__(986);
-const io_1 = __webpack_require__(1);
 const tool_cache_1 = __webpack_require__(533);
 function installSingularityVersion(versionSpec) {
     return __awaiter(this, void 0, void 0, function* () {
-        core_1.info('Downloading singularity tarball...');
+        core_1.info("Downloading singularity tarball...");
         let downloadUrl = `https://github.com/hpcng/singularity/releases/download/v${versionSpec}/singularity-${versionSpec}.tar.gz`;
         const archivePath = yield tool_cache_1.downloadTool(downloadUrl, undefined);
         core_1.info(`Successfully downloaded singularity tarball ${downloadUrl} to ${archivePath}`);
-        core_1.info('Extracting singularity...');
-        const extractDir = path_1.default.join(os_1.homedir(), 'go', 'src', 'github.com', 'hpcng');
+        core_1.info("Extracting singularity...");
+        const extractDir = path_1.default.join(os_1.homedir(), "go", "src", "github.com", "hpcng");
         yield tool_cache_1.extractTar(archivePath, extractDir);
-        const extPath = path_1.default.join(extractDir, 'singularity');
+        const extPath = path_1.default.join(extractDir, "singularity");
         core_1.info(`Successfully extracted singularity to ${extPath}`);
         core_1.info(`Configuring in ${extPath}`);
-        yield exec_1.exec('./mconfig', [], { cwd: extPath });
-        const buildDir = path_1.default.join(extPath, 'builddir');
+        const prefixDir = path_1.default.join(extPath, "prefix");
+        yield exec_1.exec("./mconfig", ["-p", prefixDir], { cwd: extPath });
+        const buildDir = path_1.default.join(extPath, "builddir");
         core_1.info(`Compiling in ${buildDir}`);
-        yield exec_1.exec('make', [], { cwd: buildDir });
-        const binDir = path_1.default.join(extPath, 'bin');
-        core_1.info(`Installing to ${binDir}`);
-        yield io_1.cp(path_1.default.join(buildDir, 'singularity'), binDir);
-        core_1.info('Adding to the cache ...');
-        const cachedDir = yield tool_cache_1.cacheDir(binDir, 'singularity', versionSpec);
+        const jn = os_1.cpus().length.toString();
+        yield exec_1.exec("make", ["-j", jn], { cwd: buildDir });
+        core_1.info(`Installing to ${prefixDir}`);
+        yield exec_1.exec("make install", [], { cwd: buildDir });
+        core_1.info("Adding to the cache ...");
+        const cachedDir = yield tool_cache_1.cacheDir(prefixDir, "singularity", versionSpec);
         core_1.info(`Successfully cached singularity to ${cachedDir}`);
         return cachedDir;
     });
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        const versionSpec = core_1.getInput('singularity-version');
+        const versionSpec = core_1.getInput("singularity-version");
         core_1.info(`Setup singularity version spec ${versionSpec}`);
         // TODO check if already installed
-        let binDir = tool_cache_1.find('singularity', versionSpec);
-        if (binDir) {
-            core_1.info(`Found in cache @ ${binDir}`);
+        let cachedDir = tool_cache_1.find("singularity", versionSpec);
+        if (cachedDir) {
+            core_1.info(`Found in cache @ ${cachedDir}`);
         }
         else {
-            binDir = yield installSingularityVersion(versionSpec);
+            cachedDir = yield installSingularityVersion(versionSpec);
         }
+        const binDir = path_1.default.join(cachedDir, "bin");
         core_1.addPath(binDir);
-        core_1.info('Added singularity to the path');
+        core_1.info("Added singularity to the path");
         core_1.info(`Successfully setup singularity version ${versionSpec}`);
     });
 }
