@@ -1,5 +1,5 @@
 import path from "path";
-import { homedir } from "os";
+import { homedir, cpus } from "os";
 
 import { info, getInput, addPath, setFailed } from "@actions/core";
 import { exec } from "@actions/exec";
@@ -21,18 +21,18 @@ async function installSingularityVersion(versionSpec: string) {
   info(`Successfully extracted singularity to ${extPath}`);
 
   info(`Configuring in ${extPath}`);
-  await exec("./mconfig", [], { cwd: extPath });
+  const prefixDir = path.join(extPath, "prefix");
+  await exec("./mconfig", ['-p', prefixDir], { cwd: extPath });
   const buildDir = path.join(extPath, "builddir");
   info(`Compiling in ${buildDir}`);
-  await exec("make", [], { cwd: buildDir });
+  const jn = cpus().length.toString();
+  await exec("make", ['-j', jn], { cwd: buildDir });
 
-  const binDir = path.join(extPath, "bin");
-  info(`Installing to ${binDir}`);
-  await cp(path.join(buildDir, "singularity"), binDir);
+  info(`Installing to ${prefixDir}`);
+  await exec("make install", [], { cwd: buildDir });
 
   info("Adding to the cache ...");
-
-  const cachedDir = await cacheDir(binDir, "singularity", versionSpec);
+  const cachedDir = await cacheDir(prefixDir, "singularity", versionSpec);
   info(`Successfully cached singularity to ${cachedDir}`);
   return cachedDir;
 }
@@ -42,12 +42,13 @@ async function main() {
   info(`Setup singularity version spec ${versionSpec}`);
   // TODO check if already installed
 
-  let binDir = find("singularity", versionSpec);
-  if (binDir) {
-    info(`Found in cache @ ${binDir}`);
+  let cachedDir = find("singularity", versionSpec);
+  if (cachedDir) {
+    info(`Found in cache @ ${cachedDir}`);
   } else {
-    binDir = await installSingularityVersion(versionSpec);
+    cachedDir = await installSingularityVersion(versionSpec);
   }
+  const binDir = path.join(cachedDir, "bin");
   addPath(binDir);
   info("Added singularity to the path");
   info(`Successfully setup singularity version ${versionSpec}`);
