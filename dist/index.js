@@ -3397,6 +3397,7 @@ function main() {
         else {
             cachedDir = yield installSingularityVersion(versionSpec);
         }
+        core_1.setOutput("installDir", tool_cache_1.cacheDir);
         const binDir = path_1.default.join(cachedDir, "bin");
         core_1.addPath(binDir);
         core_1.info("Added singularity to the path");

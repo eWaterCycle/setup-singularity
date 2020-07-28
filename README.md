@@ -3,13 +3,19 @@
 ![CI](https://github.com/eWaterCycle/setup-singularity/workflows/build-test/badge.svg)
 ![Validate versions](https://github.com/eWaterCycle/setup-singularity/workflows/Validate%20'setup-singularity'/badge.svg)
 
-To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action compiles and installs for you.
+To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action downloads, compiles and installs it for you.
 
 ## Inputs
 
 ### `singularity-version`
 
-Version of singularity. See [releases page](https://github.com/hpcng/singularity/releases) for available versions.
+Version of singularity. See [releases page](https://github.com/hpcng/singularity/releases) for available versions. Versions lower then 3.6 need additional OS packages installed like `uuid-dev`.
+
+## Outputs
+
+### `installDir`
+
+Location on runner where singularity was installed. The `<installDir>/bin` is added to PATH env var during action execution.
 
 ## Example usage
 
