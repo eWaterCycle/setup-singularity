@@ -12,12 +12,6 @@ To use [Singularity](https://sylabs.io/singularity/) containers in a workflow yo
 
 Version of singularity. See [releases page](https://github.com/hpcng/singularity/releases) for available versions. Versions lower then 3.6 need additional OS packages installed like `uuid-dev`.
 
-## Outputs
-
-### `installDir`
-
-Location on runner where singularity was installed. The `<installDir>/bin` is added to PATH env var during action execution.
-
 ## Example usage
 
 ```yaml

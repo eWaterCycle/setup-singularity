@@ -1,7 +1,7 @@
 import path from "path";
 import { homedir, cpus } from "os";
 
-import { info, getInput, addPath, setFailed, setOutput } from "@actions/core";
+import { info, getInput, addPath, setFailed } from "@actions/core";
 import { exec } from "@actions/exec";
 import { downloadTool, extractTar, find, cacheDir } from "@actions/tool-cache";
 
@@ -49,7 +49,6 @@ async function main() {
   } else {
     cachedDir = await installSingularityVersion(versionSpec);
   }
-  setOutput("installDir", cacheDir);
   const binDir = path.join(cachedDir, "bin");
   addPath(binDir);
   info("Added singularity to the path");
