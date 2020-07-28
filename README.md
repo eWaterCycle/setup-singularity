@@ -21,7 +21,7 @@ steps:
 - uses: actions/setup-go@v2
   with:
     go-version: '^1.14.6'
-- uses: eWaterCycle/setup-singularity@v1
+- uses: eWaterCycle/setup-singularity@v2
   with:
     singularity-version: 3.6.1
 - name: Run a singularity container
