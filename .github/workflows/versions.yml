@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        sing: [3.6.1, 3.5.3, 3.4.1]
+        sing: [3.6.1, 3.5.3]
     steps:
       - uses: actions/checkout@v2
       - name: OS deps
