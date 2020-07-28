@@ -1,0 +1,14 @@
+name: 'Setup singularity'
+description: 'Setup a singularity and add it to the PATH'
+author: Stefan Verhoeven
+inputs:
+  singularity-version:
+    description: Version of singularity to setup
+    required: false
+    default: 3.6.1
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: box
+  color: blue
