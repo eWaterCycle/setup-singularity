@@ -3,7 +3,7 @@ name: Validate 'setup-singularity'
 on:
   push:
     branches:
-      - main
+      - master
     paths-ignore:
       - '**.md'
   pull_request:
