@@ -1,0 +1,37 @@
+ 
+name: build-test
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  run:
+    name: Run
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup node 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: npm install
+      run: npm install
+
+    - name: Lint
+      run: npm run format-check
+
+    - name: npm run build
+      run: npm run build
+
+    - name: audit packages
+      run: npm audit --audit-level=high

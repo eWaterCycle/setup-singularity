@@ -4,6 +4,8 @@
   "description": "To use Singularity containers in a workflow you need to install it first. This GitHub Action compiles and installs for you.",
   "main": "lib/index.js",
   "scripts": {
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
     "build": "tsc && ncc build"
   },
   "keywords": [
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@zeit/ncc": "^0.22.3",
+    "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   }
 }
