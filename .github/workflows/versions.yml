@@ -35,5 +35,5 @@ jobs:
         with:
           singularity-version: ${{ matrix.sing }}
       - name: verify singularity
-        run: __tests__/verify-sing.sh ${{ matrix.go }}
+        run: __tests__/verify-sing.sh ${{ matrix.sing }}
         shell: bash
