@@ -3370,7 +3370,9 @@ function installSingularityVersion(versionSpec) {
         core_1.info(`Successfully extracted singularity to ${extPath}`);
         core_1.info(`Configuring in ${extPath}`);
         const prefixDir = path_1.default.join(extPath, "prefix");
-        yield exec_1.exec("./mconfig", ["-p", prefixDir], { cwd: extPath });
+        yield exec_1.exec("./mconfig", ["-p", prefixDir, "--without-suid"], {
+            cwd: extPath,
+        });
         const buildDir = path_1.default.join(extPath, "builddir");
         core_1.info(`Compiling in ${buildDir}`);
         const jn = os_1.cpus().length.toString();

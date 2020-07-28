@@ -22,7 +22,9 @@ async function installSingularityVersion(versionSpec: string) {
 
   info(`Configuring in ${extPath}`);
   const prefixDir = path.join(extPath, "prefix");
-  await exec("./mconfig", ["-p", prefixDir], { cwd: extPath });
+  await exec("./mconfig", ["-p", prefixDir, "--without-suid"], {
+    cwd: extPath,
+  });
   const buildDir = path.join(extPath, "builddir");
   info(`Compiling in ${buildDir}`);
   const jn = cpus().length.toString();
