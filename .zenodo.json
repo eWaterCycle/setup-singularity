@@ -1,0 +1,12 @@
+{
+    "keywords": [
+        "github",
+        "action",
+        "singularity",
+        "setup"
+    ],
+    "license": {
+        "id": "Apache-2.0"
+    },
+    "title": "GitHub Action to setup singularity"
+}
