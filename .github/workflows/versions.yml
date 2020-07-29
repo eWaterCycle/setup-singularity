@@ -19,8 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        sing: [3.6.1, 3.5.3]
+        os: [ubuntu-18.04]
+        sing: [3.6.1, 3.5.3, 3.6.0]
     steps:
       - uses: actions/checkout@v2
       - name: Setup Singularity
@@ -30,9 +30,5 @@ jobs:
       - name: Verify singularity
         run: __tests__/verify-sing.sh ${{ matrix.sing }}
         shell: bash
-      - name: Debug
-        run: |
-          stat $SINGULARITY_ROOT/libexec/singularity/bin/starter-suid
       - name: Run a singularity container
-        run: singularity run docker://alpine cat /etc/os-release
-  # TODO add job for testing local build
+        run: singularity -v run docker://alpine cat /etc/os-release
