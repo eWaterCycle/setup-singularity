@@ -20,7 +20,7 @@ Version of singularity. See [releases page](https://github.com/hpcng/singularity
 ```yaml
 steps:
 - uses: actions/checkout@v2
-- uses: eWaterCycle/setup-singularity@v2
+- uses: eWaterCycle/setup-singularity@v3
   with:
     singularity-version: 3.6.1
 - name: Run a singularity container
