@@ -3417,8 +3417,9 @@ function main() {
                 core_1.info("Adding to the cache ...");
                 installDir = yield tool_cache_1.cacheDir(extPath, "singularity", versionSpec);
                 core_1.info(`Correct file permissions`);
-                const execBins = path_1.default.join(installDir, "libexec", "singularity", "bin", "*");
-                exec_1.exec(`sudo chown root.root ${execBins}`);
+                const execBins = path_1.default.join(installDir, "libexec", "singularity", "bin");
+                const etcPath = path_1.default.join(installDir, "etc", "singularity");
+                exec_1.exec(`sudo chown root.root -R ${execBins} ${etcPath}`);
                 const starterSuidPath = path_1.default.join(installDir, "libexec", "singularity", "bin", "starter-suid");
                 exec_1.exec(`sudo chmod 4755 ${starterSuidPath}`);
                 core_1.info(`Successfully cached singularity to ${installDir}`);

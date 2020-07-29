@@ -97,14 +97,9 @@ async function main() {
       info("Adding to the cache ...");
       installDir = await cacheDir(extPath, "singularity", versionSpec);
       info(`Correct file permissions`);
-      const execBins = path.join(
-        installDir,
-        "libexec",
-        "singularity",
-        "bin",
-        "*"
-      );
-      exec(`sudo chown root.root ${execBins}`);
+      const execBins = path.join(installDir, "libexec", "singularity", "bin");
+      const etcPath = path.join(installDir, "etc", "singularity");
+      exec(`sudo chown root.root -R ${execBins} ${etcPath}`);
       const starterSuidPath = path.join(
         installDir,
         "libexec",
