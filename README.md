@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/eWaterCycle/setup-singularity/workflows/build-test/badge.svg)
 ![Validate versions](https://github.com/eWaterCycle/setup-singularity/workflows/Validate%20'setup-singularity'/badge.svg)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3964181.svg)](https://doi.org/10.5281/zenodo.3964181)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3964180.svg)](https://doi.org/10.5281/zenodo.3964180)
 
 To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action downloads, compiles and installs it for you.
 
