@@ -96,6 +96,15 @@ async function main() {
       const extPath = await extractTar(archive);
       info("Adding to the cache ...");
       installDir = await cacheDir(extPath, "singularity", versionSpec);
+      info(`Correct file permissions`);
+      const execBins = path.join(
+        installDir,
+        "libexec",
+        "singularity",
+        "bin",
+        "*"
+      );
+      exec(`sudo chown root.root ${execBins}`);
       const starterSuidPath = path.join(
         installDir,
         "libexec",
@@ -103,9 +112,7 @@ async function main() {
         "bin",
         "starter-suid"
       );
-      info(`Enabling suid bit for ${starterSuidPath}`);
-      exec(`sudo chown root.root ${starterSuidPath}`);
-      exec(`sudo chmod u+s ${starterSuidPath}`);
+      exec(`sudo chmod 4755 ${starterSuidPath}`);
       info(`Successfully cached singularity to ${installDir}`);
     } else {
       installDir = await installSingularityVersion(versionSpec);
