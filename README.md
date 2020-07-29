@@ -6,21 +6,19 @@
 
 To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action downloads, compiles and installs it for you.
 
+The setup will add the singularity executable to the PATH env var so it can be called in later steps.
+
 ## Inputs
 
 ### `singularity-version`
 
-Version of singularity. See [releases page](https://github.com/hpcng/singularity/releases) for available versions. Versions lower then 3.6 need additional OS packages installed like `uuid-dev`.
+Version of singularity. See [releases page](https://github.com/hpcng/singularity/releases) for available versions. If a binary build of a version is available on [https://github.com/eWaterCycle/singularity-versions/releases](https://github.com/eWaterCycle/singularity-versions/releases) it is used otherwise the version is build during the action, which requires a [go](https://golang.org/) installation and takes significantly longer.
 
 ## Example usage
 
 ```yaml
 steps:
 - uses: actions/checkout@v2
-# setup-singularity action requires a go installation
-- uses: actions/setup-go@v2
-  with:
-    go-version: '^1.14.6'
 - uses: eWaterCycle/setup-singularity@v2
   with:
     singularity-version: 3.6.1

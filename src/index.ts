@@ -1,9 +1,39 @@
 import path from "path";
-import { homedir, cpus } from "os";
+import { cpus, arch, homedir } from "os";
 
 import { info, getInput, addPath, setFailed } from "@actions/core";
 import { exec } from "@actions/exec";
-import { downloadTool, extractTar, find, cacheDir } from "@actions/tool-cache";
+import {
+  downloadTool,
+  extractTar,
+  find,
+  cacheDir,
+  IToolRelease,
+  getManifestFromRepo,
+  findFromManifest,
+} from "@actions/tool-cache";
+
+const TOKEN = getInput("token");
+const AUTH = `token ${TOKEN}`;
+const MANIFEST_REPO_OWNER = "eWaterCycle";
+const MANIFEST_REPO_NAME = "singularity-versions";
+
+async function findReleaseFromManifest(
+  semanticVersionSpec: string,
+  architecture: string
+): Promise<IToolRelease | undefined> {
+  const manifest: IToolRelease[] = await getManifestFromRepo(
+    MANIFEST_REPO_OWNER,
+    MANIFEST_REPO_NAME,
+    AUTH
+  );
+  return await findFromManifest(
+    semanticVersionSpec,
+    true,
+    manifest,
+    architecture
+  );
+}
 
 async function installSingularityVersion(versionSpec: string) {
   info("Downloading singularity tarball...");
@@ -43,13 +73,29 @@ async function main() {
   info(`Setup singularity version spec ${versionSpec}`);
   // TODO check if already installed
 
-  let cachedDir = find("singularity", versionSpec);
-  if (cachedDir) {
-    info(`Found in cache @ ${cachedDir}`);
+  let installDir = find("singularity", versionSpec);
+  if (installDir) {
+    info(`Found in cache @ ${installDir}`);
   } else {
-    cachedDir = await installSingularityVersion(versionSpec);
+    info(`Version ${versionSpec} was not found in the local cache`);
+    const foundRelease = await findReleaseFromManifest(versionSpec, arch());
+    if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
+      info(
+        `Binary build of version ${versionSpec} is available for downloading`
+      );
+      const downloadUrl = foundRelease.files[0].download_url;
+      info(`Download from "${downloadUrl}"`);
+      const archive = await downloadTool(downloadUrl, undefined, AUTH);
+      info("Extract downloaded archive");
+      const extPath = await extractTar(archive);
+      info("Adding to the cache ...");
+      installDir = await cacheDir(extPath, "singularity", versionSpec);
+      info(`Successfully cached singularity to ${installDir}`);
+    } else {
+      installDir = await installSingularityVersion(versionSpec);
+    }
   }
-  const binDir = path.join(cachedDir, "bin");
+  const binDir = path.join(installDir, "bin");
   addPath(binDir);
   info("Added singularity to the path");
   info(`Successfully setup singularity version ${versionSpec}`);

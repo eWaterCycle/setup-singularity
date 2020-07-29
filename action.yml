@@ -1,11 +1,15 @@
 name: 'Setup singularity'
-description: 'Setup a singularity and add it to the PATH'
+description: 'Setup singularity and add it to the PATH'
 author: Stefan Verhoeven
 inputs:
   singularity-version:
     description: Version of singularity to setup
     required: false
     default: 3.6.1
+  token:
+    description: Used to pull singularity distributions from eWaterCycle/singularity-versions. Since there's a default, this is typically not supplied by the user.
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'node12'
   main: 'dist/index.js'

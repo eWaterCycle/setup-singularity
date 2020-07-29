@@ -3357,6 +3357,16 @@ const os_1 = __webpack_require__(87);
 const core_1 = __webpack_require__(470);
 const exec_1 = __webpack_require__(986);
 const tool_cache_1 = __webpack_require__(533);
+const TOKEN = core_1.getInput("token");
+const AUTH = `token ${TOKEN}`;
+const MANIFEST_REPO_OWNER = "eWaterCycle";
+const MANIFEST_REPO_NAME = "singularity-versions";
+function findReleaseFromManifest(semanticVersionSpec, architecture) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const manifest = yield tool_cache_1.getManifestFromRepo(MANIFEST_REPO_OWNER, MANIFEST_REPO_NAME, AUTH);
+        return yield tool_cache_1.findFromManifest(semanticVersionSpec, true, manifest, architecture);
+    });
+}
 function installSingularityVersion(versionSpec) {
     return __awaiter(this, void 0, void 0, function* () {
         core_1.info("Downloading singularity tarball...");
@@ -3390,14 +3400,29 @@ function main() {
         const versionSpec = core_1.getInput("singularity-version");
         core_1.info(`Setup singularity version spec ${versionSpec}`);
         // TODO check if already installed
-        let cachedDir = tool_cache_1.find("singularity", versionSpec);
-        if (cachedDir) {
-            core_1.info(`Found in cache @ ${cachedDir}`);
+        let installDir = tool_cache_1.find("singularity", versionSpec);
+        if (installDir) {
+            core_1.info(`Found in cache @ ${installDir}`);
         }
         else {
-            cachedDir = yield installSingularityVersion(versionSpec);
+            core_1.info(`Version ${versionSpec} was not found in the local cache`);
+            const foundRelease = yield findReleaseFromManifest(versionSpec, os_1.arch());
+            if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
+                core_1.info(`Binary build of version ${versionSpec} is available for downloading`);
+                const downloadUrl = foundRelease.files[0].download_url;
+                core_1.info(`Download from "${downloadUrl}"`);
+                const archive = yield tool_cache_1.downloadTool(downloadUrl, undefined, AUTH);
+                core_1.info("Extract downloaded archive");
+                const extPath = yield tool_cache_1.extractTar(archive);
+                core_1.info("Adding to the cache ...");
+                installDir = yield tool_cache_1.cacheDir(extPath, "singularity", versionSpec);
+                core_1.info(`Successfully cached singularity to ${installDir}`);
+            }
+            else {
+                installDir = yield installSingularityVersion(versionSpec);
+            }
         }
-        const binDir = path_1.default.join(cachedDir, "bin");
+        const binDir = path_1.default.join(installDir, "bin");
         core_1.addPath(binDir);
         core_1.info("Added singularity to the path");
         core_1.info(`Successfully setup singularity version ${versionSpec}`);
