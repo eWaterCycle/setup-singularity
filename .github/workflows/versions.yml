@@ -30,6 +30,8 @@ jobs:
       - name: Verify singularity
         run: __tests__/verify-sing.sh ${{ matrix.sing }}
         shell: bash
+      - name: Debug
+        run: ls -lR $SINGULARITY_ROOT
       - name: Run a singularity container
         run: singularity run docker://alpine cat /etc/os-release
   # TODO add job for testing local build

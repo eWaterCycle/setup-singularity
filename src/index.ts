@@ -1,7 +1,13 @@
 import path from "path";
 import { cpus, arch, homedir } from "os";
 
-import { info, getInput, addPath, setFailed } from "@actions/core";
+import {
+  info,
+  getInput,
+  addPath,
+  setFailed,
+  exportVariable,
+} from "@actions/core";
 import { exec } from "@actions/exec";
 import {
   downloadTool,
@@ -90,6 +96,16 @@ async function main() {
       const extPath = await extractTar(archive);
       info("Adding to the cache ...");
       installDir = await cacheDir(extPath, "singularity", versionSpec);
+      const starterSuidPath = path.join(
+        installDir,
+        "libexec",
+        "singularity",
+        "bin",
+        "starter-suid"
+      );
+      info(`Enabling suid bit for ${starterSuidPath}`);
+      exec(`sudo chown root.root ${starterSuidPath}`);
+      exec(`sudo chmod u+s ${starterSuidPath}`);
       info(`Successfully cached singularity to ${installDir}`);
     } else {
       installDir = await installSingularityVersion(versionSpec);
@@ -97,6 +113,7 @@ async function main() {
   }
   const binDir = path.join(installDir, "bin");
   addPath(binDir);
+  exportVariable("SINGULARITY_ROOT", installDir);
   info("Added singularity to the path");
   info(`Successfully setup singularity version ${versionSpec}`);
 }

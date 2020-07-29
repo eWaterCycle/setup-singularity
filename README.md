@@ -7,6 +7,7 @@
 To use [Singularity](https://sylabs.io/singularity/) containers in a workflow you need to install it first. This GitHub Action downloads, compiles and installs it for you.
 
 The setup will add the singularity executable to the PATH env var so it can be called in later steps.
+It also sets `SINGULARITY_ROOT` env var to the location where singularity was installed.
 
 ## Inputs
 
