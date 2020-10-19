@@ -22,7 +22,7 @@ steps:
 - uses: actions/checkout@v2
 - uses: eWaterCycle/setup-singularity@v4
   with:
-    singularity-version: 3.6.1
+    singularity-version: 3.6.4
 - name: Run a singularity container
   run: singularity run docker://alpine cat /etc/os-release
 ```
