@@ -23,8 +23,6 @@ jobs:
         sing: [3.6.1, 3.5.3, 3.6.0]
     steps:
       - uses: actions/checkout@v2
-      - name: Why
-        run: npm list
       - name: Setup Singularity
         uses: ./
         with:
