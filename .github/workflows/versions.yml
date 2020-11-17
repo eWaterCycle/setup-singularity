@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-20.04]
         sing: [3.6.1, 3.5.3, 3.6.0]
     steps:
       - uses: actions/checkout@v2
