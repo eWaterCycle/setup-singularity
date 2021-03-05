@@ -32,7 +32,7 @@ async function findReleaseFromManifest(
     MANIFEST_REPO_OWNER,
     MANIFEST_REPO_NAME,
     AUTH,
-    'main'
+    "main"
   );
   return await findFromManifest(
     semanticVersionSpec,
