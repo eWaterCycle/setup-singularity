@@ -31,7 +31,8 @@ async function findReleaseFromManifest(
   const manifest: IToolRelease[] = await getManifestFromRepo(
     MANIFEST_REPO_OWNER,
     MANIFEST_REPO_NAME,
-    AUTH
+    AUTH,
+    'main'
   );
   return await findFromManifest(
     semanticVersionSpec,
