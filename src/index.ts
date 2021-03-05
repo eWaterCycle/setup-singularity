@@ -99,6 +99,9 @@ async function main() {
       installDir = await cacheDir(extPath, "singularity", versionSpec);
       info(`Successfully cached singularity to ${installDir}`);
     } else {
+      info(
+        `Binary build of version ${versionSpec} is not available for downloading`
+      );
       installDir = await installSingularityVersion(versionSpec);
     }
   }

@@ -3428,7 +3428,7 @@ const MANIFEST_REPO_OWNER = "eWaterCycle";
 const MANIFEST_REPO_NAME = "singularity-versions";
 function findReleaseFromManifest(semanticVersionSpec, architecture) {
     return __awaiter(this, void 0, void 0, function* () {
-        const manifest = yield tool_cache_1.getManifestFromRepo(MANIFEST_REPO_OWNER, MANIFEST_REPO_NAME, AUTH);
+        const manifest = yield tool_cache_1.getManifestFromRepo(MANIFEST_REPO_OWNER, MANIFEST_REPO_NAME, AUTH, 'main');
         return yield tool_cache_1.findFromManifest(semanticVersionSpec, true, manifest, architecture);
     });
 }
@@ -3484,6 +3484,7 @@ function main() {
                 core_1.info(`Successfully cached singularity to ${installDir}`);
             }
             else {
+                core_1.info(`Binary build of version ${versionSpec} is not available for downloading`);
                 installDir = yield installSingularityVersion(versionSpec);
             }
         }
