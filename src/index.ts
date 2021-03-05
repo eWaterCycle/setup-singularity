@@ -31,7 +31,8 @@ async function findReleaseFromManifest(
   const manifest: IToolRelease[] = await getManifestFromRepo(
     MANIFEST_REPO_OWNER,
     MANIFEST_REPO_NAME,
-    AUTH
+    AUTH,
+    "main"
   );
   return await findFromManifest(
     semanticVersionSpec,
@@ -98,6 +99,9 @@ async function main() {
       installDir = await cacheDir(extPath, "singularity", versionSpec);
       info(`Successfully cached singularity to ${installDir}`);
     } else {
+      info(
+        `Binary build of version ${versionSpec} is not available for downloading`
+      );
       installDir = await installSingularityVersion(versionSpec);
     }
   }
