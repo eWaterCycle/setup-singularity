@@ -46,9 +46,7 @@ async function installSingularityVersion(versionSpec: string) {
   let downloadUrl = `https://github.com/hpcng/singularity/releases/download/v${versionSpec}/singularity-${versionSpec}.tar.gz`;
   info(`Downloading singularity release tarball from ${downloadUrl} ...`);
   const archivePath = await downloadTool(downloadUrl, undefined);
-  info(
-    `Successfully downloaded singularity tarball to ${archivePath}`
-  );
+  info(`Successfully downloaded singularity tarball to ${archivePath}`);
 
   info("Extracting singularity...");
   const extractDir = path.join(homedir(), "go", "src", "github.com", "hpcng");
