@@ -3428,7 +3428,7 @@ const MANIFEST_REPO_OWNER = "eWaterCycle";
 const MANIFEST_REPO_NAME = "singularity-versions";
 function findReleaseFromManifest(semanticVersionSpec, architecture) {
     return __awaiter(this, void 0, void 0, function* () {
-        const manifest = yield tool_cache_1.getManifestFromRepo(MANIFEST_REPO_OWNER, MANIFEST_REPO_NAME, AUTH, 'main');
+        const manifest = yield tool_cache_1.getManifestFromRepo(MANIFEST_REPO_OWNER, MANIFEST_REPO_NAME, AUTH, "main");
         return yield tool_cache_1.findFromManifest(semanticVersionSpec, true, manifest, architecture);
     });
 }
@@ -3441,7 +3441,7 @@ function installSingularityVersion(versionSpec) {
         core_1.info("Extracting singularity...");
         const extractDir = path_1.default.join(os_1.homedir(), "go", "src", "github.com", "hpcng");
         yield tool_cache_1.extractTar(archivePath, extractDir);
-        const extPath = path_1.default.join(extractDir, "singularity");
+        const extPath = path_1.default.join(extractDir, `singularity-${versionSpec}`);
         core_1.info(`Successfully extracted singularity to ${extPath}`);
         core_1.info(`Configuring in ${extPath}`);
         const prefixDir = path_1.default.join(extPath, "prefix");
