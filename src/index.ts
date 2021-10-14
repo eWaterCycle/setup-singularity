@@ -18,6 +18,7 @@ import {
   getManifestFromRepo,
   findFromManifest,
 } from "@actions/tool-cache";
+import { satisfies } from "semver";
 
 const TOKEN = getInput("token");
 const AUTH = `token ${TOKEN}`;
@@ -43,6 +44,13 @@ async function findReleaseFromManifest(
 }
 
 async function installSingularityVersion(versionSpec: string) {
+  const versionRangeOnHpcng = ">=3.7.1";
+  const isVersionSpecOnHpcng = satisfies(versionSpec, versionRangeOnHpcng);
+  if (!isVersionSpecOnHpcng) {
+    throw Error(
+      `Unable to build Singularity binary for ${versionSpec}. Only support versions ${versionRangeOnHpcng}`
+    );
+  }
   let downloadUrl = `https://github.com/hpcng/singularity/releases/download/v${versionSpec}/singularity-${versionSpec}.tar.gz`;
   info(`Downloading singularity release tarball from ${downloadUrl} ...`);
   const archivePath = await downloadTool(downloadUrl, undefined);
@@ -51,7 +59,10 @@ async function installSingularityVersion(versionSpec: string) {
   info("Extracting singularity...");
   const extractDir = path.join(homedir(), "go", "src", "github.com", "hpcng");
   await extractTar(archivePath, extractDir);
-  const extPath = path.join(extractDir, `singularity-${versionSpec}`);
+  const tarballsWithVersionedDir = ">=3.8.0";
+  const hasVersionInDir = satisfies(versionSpec, tarballsWithVersionedDir);
+  const extDir = hasVersionInDir ? `singularity-${versionSpec}` : "singularity";
+  const extPath = path.join(extractDir, extDir);
   info(`Successfully extracted singularity to ${extPath}`);
 
   info(`Configuring in ${extPath}`);
