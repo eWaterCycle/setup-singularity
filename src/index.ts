@@ -53,7 +53,7 @@ async function installSingularityVersion(versionSpec: string) {
   info("Extracting singularity...");
   const extractDir = path.join(homedir(), "go", "src", "github.com", "hpcng");
   await extractTar(archivePath, extractDir);
-  const extPath = path.join(extractDir, "singularity");
+  const extPath = path.join(extractDir, `singularity-${versionSpec}`);
   info(`Successfully extracted singularity to ${extPath}`);
 
   info(`Configuring in ${extPath}`);
