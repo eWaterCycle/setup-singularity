@@ -3434,10 +3434,10 @@ function findReleaseFromManifest(semanticVersionSpec, architecture) {
 }
 function installSingularityVersion(versionSpec) {
     return __awaiter(this, void 0, void 0, function* () {
-        core_1.info("Downloading singularity tarball...");
         let downloadUrl = `https://github.com/hpcng/singularity/releases/download/v${versionSpec}/singularity-${versionSpec}.tar.gz`;
+        core_1.info(`Downloading singularity release tarball from ${downloadUrl} ...`);
         const archivePath = yield tool_cache_1.downloadTool(downloadUrl, undefined);
-        core_1.info(`Successfully downloaded singularity tarball ${downloadUrl} to ${archivePath}`);
+        core_1.info(`Successfully downloaded singularity tarball to ${archivePath}`);
         core_1.info("Extracting singularity...");
         const extractDir = path_1.default.join(os_1.homedir(), "go", "src", "github.com", "hpcng");
         yield tool_cache_1.extractTar(archivePath, extractDir);
@@ -3472,6 +3472,7 @@ function main() {
         else {
             core_1.info(`Version ${versionSpec} was not found in the local cache`);
             const foundRelease = yield findReleaseFromManifest(versionSpec, os_1.arch());
+            console.log(['foundRelease', JSON.stringify(foundRelease)]);
             if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
                 core_1.info(`Binary build of version ${versionSpec} is available for downloading`);
                 const downloadUrl = foundRelease.files[0].download_url;

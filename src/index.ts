@@ -43,11 +43,11 @@ async function findReleaseFromManifest(
 }
 
 async function installSingularityVersion(versionSpec: string) {
-  info("Downloading singularity tarball...");
   let downloadUrl = `https://github.com/hpcng/singularity/releases/download/v${versionSpec}/singularity-${versionSpec}.tar.gz`;
+  info(`Downloading singularity release tarball from ${downloadUrl} ...`);
   const archivePath = await downloadTool(downloadUrl, undefined);
   info(
-    `Successfully downloaded singularity tarball ${downloadUrl} to ${archivePath}`
+    `Successfully downloaded singularity tarball to ${archivePath}`
   );
 
   info("Extracting singularity...");
@@ -86,6 +86,7 @@ async function main() {
   } else {
     info(`Version ${versionSpec} was not found in the local cache`);
     const foundRelease = await findReleaseFromManifest(versionSpec, arch());
+    console.log(['foundRelease', JSON.stringify(foundRelease)])
     if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
       info(
         `Binary build of version ${versionSpec} is available for downloading`
