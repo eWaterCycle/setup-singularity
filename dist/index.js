@@ -3472,7 +3472,6 @@ function main() {
         else {
             core_1.info(`Version ${versionSpec} was not found in the local cache`);
             const foundRelease = yield findReleaseFromManifest(versionSpec, os_1.arch());
-            console.log(['foundRelease', JSON.stringify(foundRelease)]);
             if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
                 core_1.info(`Binary build of version ${versionSpec} is available for downloading`);
                 const downloadUrl = foundRelease.files[0].download_url;

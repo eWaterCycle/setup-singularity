@@ -22,12 +22,12 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         sing:
-          # - 3.5.3, # pre-build
-          # - 3.6.1, # pre-build
-          # - 3.6.4, # pre-build
-          # - 3.7.1, # pre-build
-          - 3.8.0, # from source
-          # - 3.8.3 # pre-build
+          # - 3.5.3 # pre-build
+          # - 3.6.1 # pre-build
+          # - 3.6.4 # pre-build
+          - 3.7.1 # pre-build
+          - 3.8.0 # from source
+          - 3.8.3 # pre-build
     steps:
       - uses: actions/checkout@v2
       - name: Setup Singularity

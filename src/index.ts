@@ -86,7 +86,6 @@ async function main() {
   } else {
     info(`Version ${versionSpec} was not found in the local cache`);
     const foundRelease = await findReleaseFromManifest(versionSpec, arch());
-    console.log(['foundRelease', JSON.stringify(foundRelease)])
     if (foundRelease && foundRelease.files && foundRelease.files.length > 0) {
       info(
         `Binary build of version ${versionSpec} is available for downloading`
