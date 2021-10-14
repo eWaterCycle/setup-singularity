@@ -26,6 +26,7 @@ jobs:
           - 3.6.1 # pre-build
           - 3.6.4 # pre-build
           - 3.7.1 # pre-build
+          - 3.7.3 # from source
           - 3.8.0 # from source
           - 3.8.3 # pre-build
     steps:
